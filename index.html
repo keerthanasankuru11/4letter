@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phonics 4-Letter Words</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f9fbe7, #e0f7fa);
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #00695c;
+      font-size: 28px;
+    }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 10px;
+    }
+    .menu button {
+      padding: 12px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #4db6ac;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .menu button:hover {
+      background-color: #00796b;
+      transform: scale(1.05);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .word-box {
+      background-color: #ffffff;
+      border: 2px solid #4db6ac;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 20px;
+      color: #004d40;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      cursor: pointer;
+    }
+    .word-box:hover {
+      background-color: #e0f2f1;
+    }
+    @media (max-width: 600px) {
+      .menu button {
+        font-size: 16px;
+        padding: 10px 16px;
+      }
+      .word-box {
+        font-size: 18px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Phonics Word Combinations</h1>
+  <div class="menu">
+    <button onclick="showWords('clvc')">con + l + vowel + con</button>
+    <button onclick="showWords('con_s')">con + vowel + con + s</button>
+    <button onclick="showWords('con_nt')">con + vowel + n + t</button>
+    <button onclick="showWords('con_nd')">con + vowel + n + d</button>
+    <button onclick="showWords('sk_vc')">s + k + vowel + con</button>
+    <button onclick="showWords('con_nk')">con + vowel + n + k</button>
+  </div>
+
+  <div id="word-grid" class="grid"></div>
+
+  <script>
+    const wordSets = {
+      clvc: [
+        "slip", "clap", "flop", "glib", "plot", "clot", "slit", "plum",
+        "flag", "flip", "clog", "flit", "slid", "flam", "blip", "clam",
+        "plan", "blot", "drip", "flap", "grab", "snap", "trap", "glum",
+        "brag", "clip", "plug", "glop", "slap", "clap", "slug", "glam",
+        "slob", "slam", "blab", "pram", "grip", "span", "blam", "spun"
+      ],
+      con_s: [
+        "buns", "fins", "mats", "hogs", "dogs", "cups", "hats", "logs",
+        "jets", "pigs", "kids", "vans", "rugs", "naps", "bags", "taps",
+        "gaps", "maps", "cubs", "zaps", "lips", "buds", "wigs", "cams",
+        "mops", "bibs", "bats", "hops", "tips", "pans", "mugs", "bums",
+        "fobs", "hens", "bits", "bids", "tugs", "pips", "pads", "cans"
+      ],
+      con_nt: [
+        "pant", "bent", "hint", "lent", "mint", "vent", "rant", "cant",
+        "dint", "hunt", "pint", "tint", "sant", "yant", "zint", "sent",
+        "wont", "font", "mont", "jant", "kent", "fint", "lant", "xant",
+        "hant", "want", "sint", "bant", "nint", "runt", "tont", "munt",
+        "gont", "cont", "zont", "wint", "vint", "aunt", "gint", "dant"
+      ],
+      con_nd: [
+        "bend", "land", "send", "tend", "fund", "pond", "wand", "hand",
+        "bond", "sand", "mend", "lend", "band", "mind", "find", "kind",
+        "wind", "fond", "rand", "zand", "gand", "nand", "vand", "dend",
+        "cand", "fend", "rend", "tend", "hond", "yond", "kond", "xond",
+        "hind", "bind", "pind", "sind", "rind", "qand", "jand", "zond"
+      ],
+      sk_vc: [
+        "skin", "skim", "skid", "skit", "skop", "skeg", "skan", "skub",
+        "skol", "skir", "skud", "skum", "skod", "skap", "skam", "skat",
+        "skep", "skon", "skiv", "skul", "skab", "sket", "sken", "skeg",
+        "skat", "skid", "skuz", "skeb", "skox", "skan", "skob", "skug",
+        "skop", "skur", "skor", "skuf", "skas", "skix", "skyt", "skol"
+      ],
+      con_nk: [
+        "bunk", "pink", "tank", "rink", "link", "wink", "sank", "dunk",
+        "punk", "junk", "honk", "bank", "yank", "zink", "funk", "monk",
+        "lank", "gunk", "kink", "mink", "rank", "sink", "tink", "vank",
+        "hank", "bink", "nunk", "zank", "pank", "sunk", "xink", "jank",
+        "fank", "qank", "dank", "wank", "cank", "rink", "gank", "link"
+      ]
+    };
+
+    function speak(word) {
+      const utter = new SpeechSynthesisUtterance(word);
+      utter.lang = 'en-US';
+      window.speechSynthesis.speak(utter);
+    }
+
+    function showWords(type) {
+      const grid = document.getElementById("word-grid");
+      grid.innerHTML = "";
+      wordSets[type].forEach(word => {
+        const div = document.createElement("div");
+        div.className = "word-box";
+        div.textContent = word;
+        div.onclick = () => speak(word);
+        grid.appendChild(div);
+      });
+    }
+
+    // Show default set on load
+    showWords('clvc');
+  </script>
+</body>
+</html>
