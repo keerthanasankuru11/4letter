@@ -1,154 +1,561 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Phonics 4-Letter Words</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f9fbe7, #e0f7fa);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learn Prepositions - Fun Game for Kids</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#6366F1", secondary: "#A5B4FC" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Comic+Neue:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      font-family: 'Comic Neue', cursive;
+      background-color: #f9fafb;
+      height: 100vh;
+      overflow: hidden;
+      }
+      @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+      }
+      .animate-bounce {
+      animation: shake 0.5s ease-in-out;
+      }
+      .game-container {
+      background-image: url('https://readdy.ai/api/search-image?query=A%20cozy%20pastel-colored%20living%20room%20with%20a%20light%20blue%20sofa%2C%20a%20wooden%20coffee%20table%2C%20a%20small%20bookshelf%2C%20a%20lamp%2C%20and%20pastel%20yellow%20curtains.%20The%20room%20has%20soft%20lighting%20and%20a%20warm%2C%20inviting%20atmosphere.%20The%20background%20is%20simple%20and%20clean%2C%20perfect%20for%20a%20childrens%20educational%20game%20about%20prepositions.&width=1200&height=800&seq=living-room-bg&orientation=landscape');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      }
+      .drop-zone {
+      border: 2px dashed rgba(99, 102, 241, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      }
+      .drop-zone::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: rgba(99, 102, 241, 0.2);
+      border: 2px solid rgba(99, 102, 241, 0.3);
+      }
+      .drop-zone.highlight {
+      border: 3px dashed #6366F1;
+      background-color: rgba(99, 102, 241, 0.1);
+      }
+      .drop-zone.highlight::after {
+      background-color: rgba(99, 102, 241, 0.3);
+      border-color: #6366F1;
+      }
+      .game-object {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      }
+      .game-object.selected {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.5);
+      }
+      .star {
+      position: absolute;
+      animation: star-animation 1s ease-out forwards;
+      opacity: 0;
+      }
+      @keyframes star-animation {
+      0% {
+      transform: scale(0) rotate(0deg);
+      opacity: 0;
+      }
+      50% {
+      opacity: 1;
+      }
+      100% {
+      transform: scale(1.5) rotate(360deg);
+      opacity: 0;
+      }
+      }
+      .feedback-animation {
+      animation: feedback-pop 0.5s ease-out;
+      }
+      @keyframes feedback-pop {
+      0% {
+      transform: scale(0.8);
+      opacity: 0;
+      }
+      50% {
+      transform: scale(1.2);
+      }
+      100% {
+      transform: scale(1);
+      opacity: 1;
+      }
+      }
+      .objects-bar {
+      background-color: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(5px);
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
       margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      color: #00695c;
-      font-size: 28px;
-    }
-    .menu {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 30px;
-      gap: 10px;
-    }
-    .menu button {
-      padding: 12px 20px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background-color: #4db6ac;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    .menu button:hover {
-      background-color: #00796b;
-      transform: scale(1.05);
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 15px;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .word-box {
-      background-color: #ffffff;
-      border: 2px solid #4db6ac;
-      border-radius: 10px;
-      padding: 15px;
-      font-size: 20px;
-      color: #004d40;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-      text-align: center;
-      cursor: pointer;
-    }
-    .word-box:hover {
-      background-color: #e0f2f1;
-    }
-    @media (max-width: 600px) {
-      .menu button {
-        font-size: 16px;
-        padding: 10px 16px;
       }
-      .word-box {
-        font-size: 18px;
-        padding: 12px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <h1>Phonics Word Combinations</h1>
-  <div class="menu">
-    <button onclick="showWords('clvc')">con + l + vowel + con</button>
-    <button onclick="showWords('con_s')">con + vowel + con + s</button>
-    <button onclick="showWords('con_nt')">con + vowel + n + t</button>
-    <button onclick="showWords('con_nd')">con + vowel + n + d</button>
-    <button onclick="showWords('sk_vc')">s + k + vowel + con</button>
-    <button onclick="showWords('con_nk')">con + vowel + n + k</button>
-  </div>
-
-  <div id="word-grid" class="grid"></div>
-
-  <script>
-    const wordSets = {
-      clvc: [
-        "slip", "clap", "flop", "glib", "plot", "clot", "slit", "plum",
-        "flag", "flip", "clog", "flit", "slid", "flam", "blip", "clam",
-        "plan", "blot", "drip", "flap", "grab", "snap", "trap", "glum",
-        "brag", "clip", "plug", "glop", "slap", "clap", "slug", "glam",
-        "slob", "slam", "blab", "pram", "grip", "span", "blam", "spun"
-      ],
-      con_s: [
-        "buns", "fins", "mats", "hogs", "dogs", "cups", "hats", "logs",
-        "jets", "pigs", "kids", "vans", "rugs", "naps", "bags", "taps",
-        "gaps", "maps", "cubs", "zaps", "lips", "buds", "wigs", "cams",
-        "mops", "bibs", "bats", "hops", "tips", "pans", "mugs", "bums",
-        "fobs", "hens", "bits", "bids", "tugs", "pips", "pads", "cans"
-      ],
-      con_nt: [
-        "pant", "bent", "hint", "lent", "mint", "vent", "rant", "cant",
-        "dint", "hunt", "pint", "tint", "sant", "yant", "zint", "sent",
-        "wont", "font", "mont", "jant", "kent", "fint", "lant", "xant",
-        "hant", "want", "sint", "bant", "nint", "runt", "tont", "munt",
-        "gont", "cont", "zont", "wint", "vint", "aunt", "gint", "dant"
-      ],
-      con_nd: [
-        "bend", "land", "send", "tend", "fund", "pond", "wand", "hand",
-        "bond", "sand", "mend", "lend", "band", "mind", "find", "kind",
-        "wind", "fond", "rand", "zand", "gand", "nand", "vand", "dend",
-        "cand", "fend", "rend", "tend", "hond", "yond", "kond", "xond",
-        "hind", "bind", "pind", "sind", "rind", "qand", "jand", "zond"
-      ],
-      sk_vc: [
-        "skin", "skim", "skid", "skit", "skop", "skeg", "skan", "skub",
-        "skol", "skir", "skud", "skum", "skod", "skap", "skam", "skat",
-        "skep", "skon", "skiv", "skul", "skab", "sket", "sken", "skeg",
-        "skat", "skid", "skuz", "skeb", "skox", "skan", "skob", "skug",
-        "skop", "skur", "skor", "skuf", "skas", "skix", "skyt", "skol"
-      ],
-      con_nk: [
-        "bunk", "pink", "tank", "rink", "link", "wink", "sank", "dunk",
-        "punk", "junk", "honk", "bank", "yank", "zink", "funk", "monk",
-        "lank", "gunk", "kink", "mink", "rank", "sink", "tink", "vank",
-        "hank", "bink", "nunk", "zank", "pank", "sunk", "xink", "jank",
-        "fank", "qank", "dank", "wank", "cank", "rink", "gank", "link"
-      ]
-    };
-
-    function speak(word) {
-      const utter = new SpeechSynthesisUtterance(word);
-      utter.lang = 'en-US';
-      window.speechSynthesis.speak(utter);
-    }
-
-    function showWords(type) {
-      const grid = document.getElementById("word-grid");
-      grid.innerHTML = "";
-      wordSets[type].forEach(word => {
-        const div = document.createElement("div");
-        div.className = "word-box";
-        div.textContent = word;
-        div.onclick = () => speak(word);
-        grid.appendChild(div);
+    </style>
+  </head>
+  <body>
+    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
+      <nav
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <div class="flex items-center">
+          <h1 class="text-2xl md:text-3xl font-['Pacifico'] text-primary">
+            Learn Prepositions
+          </h1>
+        </div>
+        <div class="hidden md:flex items-center space-x-6">
+          <a href="#" class="text-gray-700 hover:text-primary font-bold text-lg"
+            >Home</a
+          >
+          <a
+            href="#"
+            class="text-primary font-bold text-lg border-b-2 border-primary"
+            >Preposition Game</a
+          >
+          <a href="#" class="text-gray-700 hover:text-primary font-bold text-lg"
+            >More</a
+          >
+        </div>
+        <div
+          class="md:hidden w-10 h-10 flex items-center justify-center"
+          id="menu-button"
+        >
+          <i class="ri-menu-line ri-2x text-primary"></i>
+        </div>
+      </nav>
+      <div class="md:hidden bg-white py-3 px-4 hidden" id="mobile-menu">
+        <div class="flex flex-col space-y-4">
+          <a
+            href="#"
+            class="text-gray-700 hover:text-primary font-bold text-lg py-2"
+            >Home</a
+          >
+          <a
+            href="#"
+            class="text-primary font-bold text-lg py-2 border-b-2 border-primary"
+            >Preposition Game</a
+          >
+          <a
+            href="#"
+            class="text-gray-700 hover:text-primary font-bold text-lg py-2"
+            >More</a
+          >
+        </div>
+      </div>
+    </header>
+    <main class="h-screen pt-16 flex flex-col overflow-hidden">
+      <div class="container mx-auto px-4 flex-1 flex flex-col max-w-5xl">
+        <div
+          class="bg-white rounded-xl shadow-lg overflow-hidden flex-1 flex flex-col"
+        >
+          <div class="p-4 bg-primary bg-opacity-10 flex-shrink-0">
+            <h2
+              class="text-xl md:text-2xl font-bold text-center text-gray-800"
+              id="instruction"
+            >
+              Put the cat under the table
+            </h2>
+            <div class="mt-2 flex justify-center items-center h-12">
+              <div
+                id="feedback-container"
+                class="flex items-center justify-center text-xl"
+              ></div>
+            </div>
+          </div>
+          <div
+            class="game-container relative flex-1 rounded-lg overflow-hidden"
+          >
+            <!-- Drop zones -->
+            <div
+              class="drop-zone absolute left-[20%] top-[50%] w-[30%] h-[20%] cursor-pointer"
+              data-zone="on-sofa"
+              data-preposition="on"
+              data-object="sofa"
+              title="On the sofa"
+            ></div>
+            <div
+              class="drop-zone absolute left-[20%] bottom-[15%] w-[30%] h-[15%] cursor-pointer"
+              data-zone="under-sofa"
+              data-preposition="under"
+              data-object="sofa"
+              title="Under the sofa"
+            ></div>
+            <div
+              class="drop-zone absolute right-[30%] top-[60%] w-[25%] h-[15%] cursor-pointer"
+              data-zone="on-table"
+              data-preposition="on"
+              data-object="table"
+              title="On the table"
+            ></div>
+            <div
+              class="drop-zone absolute right-[30%] bottom-[10%] w-[25%] h-[15%] cursor-pointer"
+              data-zone="under-table"
+              data-preposition="under"
+              data-object="table"
+              title="Under the table"
+            ></div>
+            <div
+              class="drop-zone absolute right-[5%] top-[25%] w-[15%] h-[25%] cursor-pointer"
+              data-zone="behind-curtain"
+              data-preposition="behind"
+              data-object="curtain"
+              title="Behind the curtain"
+            ></div>
+            <div
+              class="drop-zone absolute left-[45%] top-[45%] w-[15%] h-[15%] cursor-pointer"
+              data-zone="next-to-lamp"
+              data-preposition="next to"
+              data-object="lamp"
+              title="Next to the lamp"
+            ></div>
+            <!-- Stars container for animations -->
+            <div
+              id="stars-container"
+              class="absolute inset-0 pointer-events-none"
+            ></div>
+          </div>
+          <div class="objects-bar flex-shrink-0 py-3 px-2 shadow-lg bg-white">
+            <div class="container mx-auto max-w-3xl">
+              <div class="flex justify-center items-center gap-3 md:gap-4">
+                <div
+                  class="game-object w-14 h-14 md:w-16 md:h-16 flex-shrink-0 bg-white rounded-full shadow-md p-2"
+                  data-object="cat"
+                >
+                  <img
+                    src="https://readdy.ai/api/search-image?query=A%20cute%20cartoon%20cat%20with%20big%20eyes%2C%20sitting%20in%20a%20simple%2C%20clean%20style%20with%20a%20white%20background.%20The%20cat%20has%20orange%20and%20white%20fur%2C%20perfect%20for%20a%20childrens%20educational%20game%20about%20prepositions.&width=200&height=200&seq=cat-obj&orientation=squarish"
+                    alt="Cat"
+                    class="w-full h-full object-contain"
+                  />
+                </div>
+                <div
+                  class="game-object w-14 h-14 md:w-16 md:h-16 flex-shrink-0 bg-white rounded-full shadow-md p-2"
+                  data-object="dog"
+                >
+                  <img
+                    src="https://readdy.ai/api/search-image?query=A%20friendly%20cartoon%20dog%20with%20floppy%20ears%2C%20sitting%20in%20a%20simple%2C%20clean%20style%20with%20a%20white%20background.%20The%20dog%20has%20light%20brown%20fur%2C%20perfect%20for%20a%20childrens%20educational%20game%20about%20prepositions.&width=200&height=200&seq=dog-obj&orientation=squarish"
+                    alt="Dog"
+                    class="w-full h-full object-contain"
+                  />
+                </div>
+                <div
+                  class="game-object w-14 h-14 md:w-16 md:h-16 flex-shrink-0 bg-white rounded-full shadow-md p-2"
+                  data-object="ball"
+                >
+                  <img
+                    src="https://readdy.ai/api/search-image?query=A%20colorful%20cartoon%20ball%20with%20stripes%20or%20patterns%2C%20in%20a%20simple%2C%20clean%20style%20with%20a%20white%20background.%20The%20ball%20is%20bright%20and%20appealing%2C%20perfect%20for%20a%20childrens%20educational%20game%20about%20prepositions.&width=200&height=200&seq=ball-obj&orientation=squarish"
+                    alt="Ball"
+                    class="w-full h-full object-contain"
+                  />
+                </div>
+                <div
+                  class="game-object w-14 h-14 md:w-16 md:h-16 flex-shrink-0 bg-white rounded-full shadow-md p-2"
+                  data-object="book"
+                >
+                  <img
+                    src="https://readdy.ai/api/search-image?query=A%20colorful%20cartoon%20book%2C%20slightly%20open%2C%20in%20a%20simple%2C%20clean%20style%20with%20a%20white%20background.%20The%20book%20has%20a%20bright%20cover%2C%20perfect%20for%20a%20childrens%20educational%20game%20about%20prepositions.&width=200&height=200&seq=book-obj&orientation=squarish"
+                    alt="Book"
+                    class="w-full h-full object-contain"
+                  />
+                </div>
+                <div
+                  class="game-object w-14 h-14 md:w-16 md:h-16 flex-shrink-0 bg-white rounded-full shadow-md p-2"
+                  data-object="keys"
+                >
+                  <img
+                    src="https://readdy.ai/api/search-image?query=A%20set%20of%20cartoon%20keys%20on%20a%20keyring%2C%20in%20a%20simple%2C%20clean%20style%20with%20a%20white%20background.%20The%20keys%20are%20colorful%20and%20distinct%2C%20perfect%20for%20a%20childrens%20educational%20game%20about%20prepositions.&width=200&height=200&seq=keys-obj&orientation=squarish"
+                    alt="Keys"
+                    class="w-full h-full object-contain"
+                  />
+                </div>
+                <div
+                  class="game-object w-14 h-14 md:w-16 md:h-16 flex-shrink-0 bg-white rounded-full shadow-md p-2"
+                  data-object="teddy"
+                >
+                  <img
+                    src="https://readdy.ai/api/search-image?query=A%20cute%20cartoon%20teddy%20bear%2C%20in%20a%20simple%2C%20clean%20style%20with%20a%20white%20background.%20The%20teddy%20bear%20is%20brown%20and%20huggable%2C%20perfect%20for%20a%20childrens%20educational%20game%20about%20prepositions.&width=200&height=200&seq=teddy-obj&orientation=squarish"
+                    alt="Teddy Bear"
+                    class="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script id="mobile-menu-script">
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuButton = document.getElementById("menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        menuButton.addEventListener("click", function () {
+          if (mobileMenu.classList.contains("hidden")) {
+            mobileMenu.classList.remove("hidden");
+          } else {
+            mobileMenu.classList.add("hidden");
+          }
+        });
       });
-    }
-
-    // Show default set on load
-    showWords('clvc');
-  </script>
-</body>
+    </script>
+    <script id="game-logic">
+      document.addEventListener("DOMContentLoaded", function () {
+        // Game state
+        let selectedObject = null;
+        let currentTask = {
+          object: "cat",
+          preposition: "under",
+          target: "table",
+        };
+        const playerName = "Suhaas";
+        // Get elements
+        const gameObjects = document.querySelectorAll(".game-object");
+        const dropZones = document.querySelectorAll(".drop-zone");
+        const instructionElement = document.getElementById("instruction");
+        const feedbackContainer = document.getElementById("feedback-container");
+        const starsContainer = document.getElementById("stars-container");
+        // Set initial instruction
+        updateInstruction();
+        // Add event listeners to game objects
+        gameObjects.forEach((obj) => {
+          obj.addEventListener("click", function () {
+            // Deselect previously selected object
+            if (selectedObject) {
+              selectedObject.classList.remove("selected");
+            }
+            // Select new object
+            selectedObject = this;
+            this.classList.add("selected");
+            // Highlight valid drop zones
+            highlightValidDropZones();
+          });
+        });
+        // Add event listeners to drop zones
+        dropZones.forEach((zone) => {
+          zone.addEventListener("click", function () {
+            if (!selectedObject) return;
+            const objectType = selectedObject.getAttribute("data-object");
+            const zonePreposition = this.getAttribute("data-preposition");
+            const zoneObject = this.getAttribute("data-object");
+            const objectClone = selectedObject.cloneNode(true);
+            objectClone.style.position = "absolute";
+            objectClone.style.transition = "all 0.5s ease";
+            objectClone.style.zIndex = "10";
+            objectClone.classList.remove("selected");
+            const zoneRect = this.getBoundingClientRect();
+            const gameContainerRect = document
+              .querySelector(".game-container")
+              .getBoundingClientRect();
+            const left =
+              zoneRect.left -
+              gameContainerRect.left +
+              zoneRect.width / 2 -
+              selectedObject.offsetWidth / 2;
+            const top =
+              zoneRect.top -
+              gameContainerRect.top +
+              zoneRect.height / 2 -
+              selectedObject.offsetHeight / 2;
+            objectClone.style.left = `${left}px`;
+            objectClone.style.top = `${top}px`;
+            document.querySelector(".game-container").appendChild(objectClone);
+            // Check if the placement matches the current task
+            if (
+              objectType === currentTask.object &&
+              zonePreposition === currentTask.preposition &&
+              zoneObject === currentTask.target
+            ) {
+              // Correct placement
+              showSuccess();
+              // Keep the object in place for correct placement
+              if (selectedObject) {
+                selectedObject.classList.remove("selected");
+                selectedObject = null;
+              }
+            } else {
+              // Incorrect placement
+              showFailure();
+              setTimeout(() => {
+                objectClone.classList.add("animate-bounce");
+                setTimeout(() => {
+                  objectClone.remove();
+                }, 500);
+              }, 1000);
+            }
+          });
+        });
+        function updateInstruction() {
+          instructionElement.textContent = `Put the ${currentTask.object} ${currentTask.preposition} the ${currentTask.target}`;
+        }
+        function highlightValidDropZones() {
+          // Remove all highlights
+          dropZones.forEach((zone) => {
+            zone.classList.remove("highlight");
+          });
+          if (!selectedObject) return;
+          // Highlight zones that match the current task's target and preposition
+          dropZones.forEach((zone) => {
+            if (
+              zone.getAttribute("data-preposition") === currentTask.preposition &&
+              zone.getAttribute("data-object") === currentTask.target
+            ) {
+              zone.classList.add("highlight");
+            }
+          });
+        }
+        function showSuccess() {
+          // Clear previous feedback
+          feedbackContainer.innerHTML = "";
+          // Show success message
+          const successElement = document.createElement("div");
+          successElement.classList.add(
+            "feedback-animation",
+            "flex",
+            "items-center",
+            "text-green-600",
+            "font-bold",
+          );
+          successElement.innerHTML =
+            '<span class="text-3xl mr-2">✓</span> Great job!';
+          feedbackContainer.appendChild(successElement);
+          // Create star animation
+          createStars();
+          // Generate new task after a delay
+          setTimeout(() => {
+            generateNewTask();
+            if (selectedObject) {
+              selectedObject.classList.remove("selected");
+              selectedObject = null;
+            }
+            dropZones.forEach((zone) => zone.classList.remove("highlight"));
+          }, 2000);
+        }
+        function showFailure() {
+          // Clear previous feedback
+          feedbackContainer.innerHTML = "";
+          // Show failure message
+          const failureElement = document.createElement("div");
+          failureElement.classList.add(
+            "feedback-animation",
+            "flex",
+            "items-center",
+            "text-red-600",
+            "font-bold",
+          );
+          failureElement.innerHTML = `<span class="text-3xl mr-2">✗</span> Try again ${playerName}!`;
+          feedbackContainer.appendChild(failureElement);
+          // Keep the object selected for retry
+          if (selectedObject) {
+            selectedObject.classList.add("selected");
+            highlightValidDropZones();
+          }
+          // Add shake animation to the instruction
+          instructionElement.classList.add("animate-bounce");
+          setTimeout(() => {
+            instructionElement.classList.remove("animate-bounce");
+          }, 1000);
+        }
+        function createStars() {
+          // Create multiple stars for the animation
+          for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+              const star = document.createElement("div");
+              star.classList.add("star");
+              star.innerHTML = '<span class="text-yellow-400 text-4xl">★</span>';
+              // Random position
+              const left = Math.random() * 100;
+              const top = Math.random() * 100;
+              star.style.left = `${left}%`;
+              star.style.top = `${top}%`;
+              starsContainer.appendChild(star);
+              // Remove star after animation
+              setTimeout(() => {
+                star.remove();
+              }, 1000);
+            }, i * 100);
+          }
+        }
+        function generateNewTask() {
+          // Clear all placed objects when generating a new task
+          const placedObjects = document.querySelectorAll(
+            ".game-container .game-object",
+          );
+          placedObjects.forEach((obj) => obj.remove());
+          const objects = ["cat", "dog", "ball", "book", "keys", "teddy"];
+          const validTasks = [
+            { object: "any", preposition: "on", target: "sofa" },
+            { object: "any", preposition: "under", target: "sofa" },
+            { object: "any", preposition: "on", target: "table" },
+            { object: "any", preposition: "under", target: "table" },
+            { object: "any", preposition: "next to", target: "lamp" },
+            { object: "any", preposition: "behind", target: "curtain" },
+          ];
+          let newTask;
+          do {
+            newTask = validTasks[Math.floor(Math.random() * validTasks.length)];
+            newTask = {
+              ...newTask,
+              object: objects[Math.floor(Math.random() * objects.length)],
+            };
+          } while (
+            newTask.object === currentTask.object &&
+            newTask.preposition === currentTask.preposition &&
+            newTask.target === currentTask.target
+          );
+          // Update current task
+          currentTask = {
+            object: newTask.object,
+            preposition: newTask.preposition,
+            target: newTask.target,
+          };
+          // Update instruction
+          updateInstruction();
+          // Clear feedback
+          feedbackContainer.innerHTML = "";
+        }
+      });
+    </script>
+  </body>
 </html>
